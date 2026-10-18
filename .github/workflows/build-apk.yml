@@ -1,0 +1,29 @@
+name: Build Mukecalc APK
+
+on:
+workflow_dispatch:
+push:
+branches:
+- main
+
+jobs:
+build:
+runs-on: ubuntu-latest
+
+steps:
+  - name: Check out source code
+    uses: actions/checkout@v4
+
+  - name: Build Android APK
+    uses: ArtemSBulgakov/buildozer-action@v1
+    id: buildozer
+    with:
+      workdir: .
+      buildozer_version: stable
+
+  - name: Upload APK
+    uses: actions/upload-artifact@v4
+    with:
+      name: Mukecalc-APK
+      path: ${{ steps.buildozer.outputs.filename }}
+      if-no-files-found: error
